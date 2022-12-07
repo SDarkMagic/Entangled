@@ -1,0 +1,22 @@
+{
+    "objects": [
+        {
+            "is_dynamic": false,
+            "name": "crate.png",
+            "translate": {
+                "X": 1.5,
+                "Y": 4
+            },
+            "scale": 0.5
+        },
+        {
+            "is_dynamic": false,
+            "name": "crate.png",
+            "translate": {
+                "X": 2.5,
+                "Y": 4
+            },
+            "scale": 0.5
+        }
+    ]
+}

@@ -25,7 +25,7 @@ public class Sprite{
   }
 
   public void update(ArrayList<Sprite> collisions){
-    if(checkCollisionList(s1, environment).size() == 0){
+    if(collisions.size() == 0){
           center_x += change_x;
           center_y += change_y;
     }
