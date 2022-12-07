@@ -13,6 +13,7 @@ public class Sprite{
     center_y = y;
     change_x = 0;
     change_y = 0;
+    mass = 0;
   }
 
   public Sprite(String filename, float scale){
@@ -23,9 +24,30 @@ public class Sprite{
     image(image, center_x, center_y, w, h);
   }
 
-  public void update(){
-    center_x += change_x;
-    center_y += change_y;
+  public void update(ArrayList<Sprite> collisions){
+    if(checkCollisionList(s1, environment).size() == 0){
+          center_x += change_x;
+          center_y += change_y;
+    }
+    else {
+      for (Sprite object: collisions){
+        IntList edges = getCollidingEdges(this, object);
+        for (int edge: edges){
+          if (edge == 0){
+            setTop(object.getBottom());
+          }
+          else if (edge == 1){
+            setRight(object.getLeft());
+          }
+          else if (edge == 2){
+            setBottom(object.getTop());
+          }
+          else if (edge == 3){
+            setLeft(object.getRight());
+          }
+        }
+      }
+    }
   }
 
   // Simple methods for getting sprite basic sprite boundary information
