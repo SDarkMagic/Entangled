@@ -1,4 +1,5 @@
 {
+    "background": 7112900,
     "objects": [
         {
             "is_dynamic": false,
@@ -13,8 +14,26 @@
             "is_dynamic": false,
             "name": "crate.png",
             "translate": {
-                "X": 2.5,
-                "Y": 4
+                "X": 4.0,
+                "Y": 3.5
+            },
+            "scale": 0.5
+        },
+        {
+            "is_dynamic": false,
+            "name": "crate.png",
+            "translate": {
+                "X": 5.28,
+                "Y": 6
+            },
+            "scale": 0.5
+        },
+        {
+            "is_dynamic": false,
+            "name": "crate.png",
+            "translate": {
+                "X": 4.0,
+                "Y": 6
             },
             "scale": 0.5
         }

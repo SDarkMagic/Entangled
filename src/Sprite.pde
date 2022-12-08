@@ -1,3 +1,5 @@
+static float GRAVITY = 9.8;
+
 public class Sprite{
   PImage image;
   float center_x, center_y;
@@ -25,28 +27,12 @@ public class Sprite{
   }
 
   public void update(ArrayList<Sprite> collisions){
-    if(collisions.size() == 0){
-          center_x += change_x;
-          center_y += change_y;
+    if(collisions.size() > 0){
+      resolveCollision(this, collisions.get(0));
     }
     else {
-      for (Sprite object: collisions){
-        IntList edges = getCollidingEdges(this, object);
-        for (int edge: edges){
-          if (edge == 0){
-            setTop(object.getBottom());
-          }
-          else if (edge == 1){
-            setRight(object.getLeft());
-          }
-          else if (edge == 2){
-            setBottom(object.getTop());
-          }
-          else if (edge == 3){
-            setLeft(object.getRight());
-          }
-        }
-      }
+      center_x += change_x;
+      center_y += change_y;
     }
   }
 
@@ -66,8 +52,7 @@ public class Sprite{
   public float getBottom(){
     return center_y + h/2;
   }
-
-  // Methods for moving sprite edges
+   // Methods for moving sprite edges
   public void setLeft(float left){
     center_x = left + w/2;
   }
@@ -82,5 +67,24 @@ public class Sprite{
 
   public void setBottom(float bottom){
     center_y = bottom - w/2;
+  }
+}
+
+public class DynamicSprite extends Sprite{
+  float mass;
+  public DynamicSprite(String filename, float scale, float x, float y, float mass){
+    super(filename, scale, x, y);
+    mass = mass;
+  }
+
+  public void update(ArrayList<Sprite> collisions){
+    if(collisions.size() > 0){
+      println("resolving collisions");
+      resolveCollision(this, collisions.get(0));
+    }
+    else {
+      center_x += change_x;
+      center_y += change_y;
+    }
   }
 }

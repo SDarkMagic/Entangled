@@ -1,30 +1,44 @@
 public boolean isColliding(Sprite s1, Sprite s2){
-    boolean xOverlap = s1.getRight() >= s2.getLeft() || s1.getLeft() <= s2.getRight();
-    boolean yOverlap = s1.getTop() >= s2.getBottom() || s1.getBottom() <= s2.getTop();
-    if (!xOverlap || !yOverlap){
-        return true;
+    boolean noXOverlap = s1.getRight() <= s2.getLeft() || s1.getLeft() >= s2.getRight();
+    boolean noYOverlap = s1.getTop() >= s2.getBottom() || s1.getBottom() <= s2.getTop();
+    if (noXOverlap || noYOverlap){
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 
-// Checks all four sides of both input sprites and returnes an arraylist containing a number for each side of s1 that has a collision
-public IntList getCollidingEdges(Sprite s1, Sprite s2){
-    IntList sides = new IntList();
-    if (s1.getRight() > s2.getLeft()){
-        sides.append(1);
+public void resolveCollision(Sprite s1, Sprite s2){
+    // fix vertical collisions
+    s1.center_y += s1.change_y;
+    if (s1.change_y > 0){
+        if (s1.getBottom() >= s2.getTop()){
+            s1.setBottom(s2.getTop());
+            s1.change_y = 0;
+        }
     }
-    if (s1.getLeft() < s2.getRight()){
-        sides.append(3);
+    else if (s1.change_y < 0){
+        if (s1.getTop() <= s2.getBottom()){
+            s1.setTop(s2.getBottom());
+            s1.change_y = 0;
+        }
     }
-    if (s1.getTop() >=s2.getBottom()){
-        sides.append(0);
+
+    // fix horizontal collisions
+    s1.center_x += s1.change_x;
+    if (s1.change_x > 0){
+        if (s1.getRight() <= s2.getLeft()){
+            s1.setRight(s2.getLeft());
+            s1.change_x = 0;
+        }
     }
-    if (s1.getBottom() < s2.getTop()){
-        sides.append(2);
+    else if (s1.change_x < 0){
+        if (s1.getLeft() >= s2.getRight()){
+            s1.setLeft(s2.getRight());
+            s1.change_x = 0;
+        }
     }
-    return sides;
 }
 
 public ArrayList<Sprite> checkCollisionList(Sprite s, ArrayList<Sprite> collisionList){

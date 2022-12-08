@@ -1,7 +1,7 @@
-final static float MOVE_SPEED = 5;
+static float MOVE_SPEED = 5;
 
 //declare global variables
-Sprite player, s2;
+Sprite player;
 float gravity = 9.8;
 int currentFrame = 0;
 Map defaultMapData;
@@ -12,7 +12,6 @@ void setup(){
   frameRate(60);
   imageMode(CENTER);
   player = new Sprite("player.png", 1.0, width/2, height/2);
-  s2 = new Sprite("crate.png", 0.5, width/2, (height/2) + 300);
   defaultMapData = new Map("maps/test.json");
   environment = defaultMapData.objects;
   player.mass = 1.0;
@@ -20,12 +19,12 @@ void setup(){
 
 void draw(){
   currentFrame++;
-  background(255);
+  background(defaultMapData.backgroundColor);
   for (Sprite object: environment){
     object.display();
   }
   // Add gravity every frame
-  player.change_y = (player.mass * gravity * currentFrame) / frameRate; // Multiply the gravitational velocity of the object by the current frame then divide by the total framerate to get the velocity in seconds
+  player.change_y += (player.mass * gravity * currentFrame) / frameRate; // Multiply the gravitational velocity of the object by the current frame then divide by the total framerate to get the velocity in seconds
   player.update(checkCollisionList(player, environment));
   player.display();
   if (currentFrame == frameRate){
