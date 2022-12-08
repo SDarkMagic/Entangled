@@ -1,5 +1,10 @@
 {
     "background": 7112900,
+    "spawn": {
+        "X": 4,
+        "Y": 0
+    },
+    "type": "platforms",
     "objects": [
         {
             "is_dynamic": false,

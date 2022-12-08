@@ -1,31 +1,31 @@
 static float MOVE_SPEED = 5;
 
 //declare global variables
-Sprite player;
-float gravity = 9.8;
-int currentFrame = 0;
-Map defaultMapData;
-ArrayList<Sprite> environment;
+DynamicSprite player;
+int currentFrame;
+Map environment;
 
 void setup(){
   size(800, 600);
   frameRate(60);
   imageMode(CENTER);
-  player = new Sprite("player.png", 1.0, width/2, height/2);
-  defaultMapData = new Map("maps/test.json");
-  environment = defaultMapData.objects;
-  player.mass = 1.0;
+  currentFrame = 0;
+  environment = new Map("maps/test.json");
+  player = new DynamicSprite("player.png", 1.0, environment.spawn.get("x"), environment.spawn.get("y"), 1.0);
+  println("environment.type: "+environment.type);
 }
 
 void draw(){
   currentFrame++;
-  background(defaultMapData.backgroundColor);
-  for (Sprite object: environment){
+  background(environment.backgroundColor);
+  for (Sprite object: environment.objects){
     object.display();
   }
   // Add gravity every frame
-  player.change_y += (player.mass * gravity * currentFrame) / frameRate; // Multiply the gravitational velocity of the object by the current frame then divide by the total framerate to get the velocity in seconds
-  player.update(checkCollisionList(player, environment));
+  if (environment.type.equals("platform")){
+    player.applyGravity(currentFrame);
+  }
+  player.update(checkCollisionList(player, environment.objects), currentFrame);
   player.display();
   if (currentFrame == frameRate){
     currentFrame = 0;
@@ -48,7 +48,7 @@ void keyPressed(){
   }
   // Space key is different as it is used for jump. This requires a more complex function to calculate gravity and other forces
   else if (key == ' '){
-
+    println("key pressed");
   }
   return;
 }
