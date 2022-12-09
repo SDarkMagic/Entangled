@@ -1,8 +1,11 @@
 public class Map{
-    ArrayList<Sprite> objects = new ArrayList<Sprite>();
-    ArrayList<DynamicSprite> dynamicObjects = new ArrayList<DynamicSprite>();
+    ArrayList<Sprite> mainObjects = new ArrayList<Sprite>();
+    ArrayList<DynamicSprite> mainDynamicObjects = new ArrayList<DynamicSprite>();
+    ArrayList<Sprite> subObjects = new ArrayList<Sprite>();
+    ArrayList<DynamicSprite> subDynamicObjects = new ArrayList<DynamicSprite>();
     JSONArray data;
     FloatDict spawn;
+    FloatDict spawn2;
     String type;
     int backgroundColor;
 
@@ -10,8 +13,13 @@ public class Map{
       JSONObject json = loadJSONObject(mapFilePath);
       backgroundColor = json.getInt("background");
       spawn = getPosition(json.getJSONObject("spawn"));
+      spawn2 = getPosition(json.getJSONObject("spawn2"));
       type = json.getString("type");
-      data = json.getJSONArray("objects");
+      loadMapData(json.getJSONArray("objects_main"), mainObjects, mainDynamicObjects);
+      loadMapData(json.getJSONArray("objects_sub"), subObjects, subDynamicObjects);
+    }
+
+    public void loadMapData(JSONArray data, ArrayList<Sprite> staticStore, ArrayList<DynamicSprite> dynamicStore){
       for (int i = 0; i < data.size(); i++){
         JSONObject entity = data.getJSONObject(i);
         FloatDict position = getPosition(entity.getJSONObject("translate"));
@@ -19,10 +27,10 @@ public class Map{
         String name = entity.getString("name");
         float scale = entity.getFloat("scale");
         if (dynamic){
-          dynamicObjects.add(new DynamicSprite(name, scale, position.get("x"), position.get("y"), entity.getFloat("mass")));
+          dynamicStore.add(new DynamicSprite(name, scale, position.get("x"), position.get("y"), entity.getFloat("mass")));
         }
         else {
-          objects.add(new Sprite(name, scale, position.get("x"), position.get("y")));
+          staticStore.add(new Sprite(name, scale, position.get("x"), position.get("y")));
         }
       }
     }

@@ -4,8 +4,12 @@
         "X": 4,
         "Y": 0
     },
-    "type": "platform",
-    "objects": [
+    "spawn2": {
+        "X": 2,
+        "Y": 0
+    },
+    "type": "platforms",
+    "objects_main": [
         {
             "is_dynamic": false,
             "name": "basic_tile.png",
@@ -42,5 +46,8 @@
             },
             "scale": 0.5
         }
+    ],
+    "objects_sub": [
+
     ]
 }
