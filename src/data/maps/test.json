@@ -6,9 +6,9 @@
     },
     "spawn2": {
         "X": 2,
-        "Y": 0
+        "Y": 2
     },
-    "type": "platforms",
+    "type": "platform",
     "objects_main": [
         {
             "is_dynamic": false,
@@ -27,13 +27,15 @@
                 "Y": 3.5
             },
             "scale": 0.5
-        },
+        }
+    ],
+    "objects_sub": [
         {
             "is_dynamic": false,
             "name": "basic_tile.png",
             "translate": {
-                "X": 5.28,
-                "Y": 6
+                "X": 1.5,
+                "Y": 4
             },
             "scale": 0.5
         },
@@ -42,12 +44,9 @@
             "name": "basic_tile.png",
             "translate": {
                 "X": 4.0,
-                "Y": 6
+                "Y": 3.5
             },
             "scale": 0.5
         }
-    ],
-    "objects_sub": [
-
     ]
 }

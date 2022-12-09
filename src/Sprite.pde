@@ -16,6 +16,8 @@ public class Actor{
     this(scale, x, y, 0, 0);
   }
 
+  public Actor(){}
+
   // Simple methods for getting sprite basic sprite boundary information
   public float getLeft(){
     return center_x - w/2;
@@ -56,10 +58,14 @@ public class Sprite extends Actor{
   float change_y;
 
   public Sprite(String filename, float scale, float x, float y){
+    super();
     image = loadImage(filename);
     change_x = 0;
     change_y = 0;
-    Actor(scale, x, y, image.width, image.height);
+    center_x = x;
+    center_y = y;
+    w = image.width * scale;
+    h = image.height * scale;
   }
 
   public Sprite(String filename, float scale){
@@ -79,19 +85,10 @@ public class DynamicSprite extends Sprite{
     mass = objectMass;
   }
 
-  public void update(ArrayList<Sprite> collisions, int frame){
+  public void update(ArrayList<Sprite> collisions, ArrayList<Actor> verticalBounds, int frame){
+    ensureInBounds(this, verticalBounds);
     if(collisions.size() > 0){
       resolveCollision(this, collisions.get(0));
-    }
-    else {
-      center_x += change_x;
-      center_y += change_y;
-    }
-  }
-
-  public void update(Actor collisions, int frame){
-    if(collisions.size() > 0){
-      resolveCollision(this, collisions);
     }
     else {
       center_x += change_x;
