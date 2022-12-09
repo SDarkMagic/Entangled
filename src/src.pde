@@ -11,7 +11,7 @@ void setup(){
   imageMode(CENTER);
   currentFrame = 0;
   environment = new Map("maps/test.json");
-  player = new DynamicSprite("player.png", 1.0, environment.spawn.get("x"), environment.spawn.get("y"), 1.0);
+  player = new DynamicSprite("player.png", 1.0, environment.spawn.get("x"), environment.spawn.get("y"), 0.025);
   println("environment.type: "+environment.type);
 }
 
@@ -48,7 +48,7 @@ void keyPressed(){
   }
   // Space key is different as it is used for jump. This requires a more complex function to calculate gravity and other forces
   else if (key == ' '){
-    println("key pressed");
+    player.change_y = -10;
   }
   return;
 }

@@ -83,4 +83,7 @@ public class DynamicSprite extends Sprite{
   public void applyGravity(int currentFrame){
       change_y += (mass * GRAVITY * currentFrame) / frameRate; // Multiply the gravitational velocity of the object by the current frame then divide by the total framerate to get the velocity in seconds
   }
+  public void applyForce(int currentFrame, float force){
+      change_y += (mass * force * currentFrame) / frameRate; // Multiply the gravitational velocity of the object by the current frame then divide by the total framerate to get the velocity in seconds
+  }
 }
