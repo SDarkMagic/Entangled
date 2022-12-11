@@ -1,57 +1,5 @@
 static float GRAVITY = 9.8;
 
-// Abstract class for handling entities to make collision processing easier
-public class Actor{
-  float center_x, center_y;
-  float w, h;
-
-  public Actor(float scale, float x, float y, float sizeX, float sizeY){
-    center_x = x;
-    center_y = y;
-    w = sizeX * scale;
-    h = sizeY * scale;
-  }
-
-  public Actor(float scale, float x, float y){
-    this(scale, x, y, 0, 0);
-  }
-
-  public Actor(){}
-
-  // Simple methods for getting sprite basic sprite boundary information
-  public float getLeft(){
-    return center_x - w/2;
-  }
-
-  public float getRight(){
-    return center_x + w/2;
-  }
-
-  public float getTop(){
-    return center_y - h/2;
-  }
-
-  public float getBottom(){
-    return center_y + h/2;
-  }
-   // Methods for moving sprite edges
-  public void setLeft(float left){
-    center_x = left + w/2;
-  }
-
-  public void setRight(float right){
-    center_x = right - w/2;
-  }
-
-  public void setTop(float top){
-    center_y = top + w/2;
-  }
-
-  public void setBottom(float bottom){
-    center_y = bottom - w/2;
-  }
-}
-
 public class Sprite extends Actor{
   PImage image;
   float change_x;
@@ -72,16 +20,26 @@ public class Sprite extends Actor{
     this(filename, scale, 0, 0);
   }
 
+  public Sprite(float scale, float x, float y, float w, float h, int rgb){
+    super(scale, x, y, w, h, rgb);
+  }
+
   public void display(){
     image(image, center_x, center_y, w, h);
   }
 }
 
+// Sprite that can handle movement and collision
 public class DynamicSprite extends Sprite{
   float mass;
 
   public DynamicSprite(String filename, float scale, float x, float y, float objectMass){
     super(filename, scale, x, y);
+    mass = objectMass;
+  }
+
+  public DynamicSprite(float scale, float x, float y, float w, float h, int rgb, float objectMass){
+    super(scale, x, y, w, h, rgb);
     mass = objectMass;
   }
 

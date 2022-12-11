@@ -8,6 +8,7 @@ public class Map{
     FloatDict spawn2;
     String type;
     int backgroundColor;
+    boolean movementEnabled;
 
     public Map(String mapFilePath){
       JSONObject json = loadJSONObject(mapFilePath);
@@ -15,6 +16,7 @@ public class Map{
       spawn = getPosition(json.getJSONObject("spawn"));
       spawn2 = getPosition(json.getJSONObject("spawn2"));
       type = json.getString("type");
+      movementEnabled = json.getBoolean("movement_enabled");
       loadMapData(json.getJSONArray("objects_main"), mainObjects, mainDynamicObjects);
       loadMapData(json.getJSONArray("objects_sub"), subObjects, subDynamicObjects);
     }

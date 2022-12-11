@@ -35,13 +35,13 @@ void draw(){
   if (!menu.play.isPressed() && !inLevel){
   }
   else if (menu.play.isPressed() && !inLevel){
-    environment = menu.loadLevel("maps/test");
+    environment = menu.loadLevel("test");
     divider = new Actor(1.0, width/2, height/2, width, 3);
     floor = new Actor(1.0, width/2, height - 2, width, 3);
     verticalBoundaries.add(divider);
     verticalBoundaries.add(floor);
-    player = new DynamicSprite("player.png", 1.0, environment.spawn.get("x"), environment.spawn.get("y"), playerMass);
-    entangled_player = new DynamicSprite("player.png", 1.0, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, playerMass);
+    player = new DynamicSprite("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), playerMass);
+    entangled_player = new DynamicSprite("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, playerMass);
     for (Sprite object: environment.subObjects){
       // Offset the center of the sub sprites to make duplicating layouts easier
       object.center_y += divider.center_y;
@@ -55,7 +55,7 @@ void draw(){
     // Draw the screen divider
     strokeWeight(3);
     for (Actor boundary: verticalBoundaries){
-    line(0, boundary.center_y, boundary.w, boundary.center_y);
+      line(0, boundary.center_y, boundary.w, boundary.center_y);
     }
     for (Sprite object: environment.mainObjects){
       object.display();
@@ -63,11 +63,13 @@ void draw(){
     for (Sprite object: environment.subObjects){
       object.display();
     }
+
     // Add gravity every frame if the level is a platforming level
     if (environment.type.equals("platform")){
       player.applyGravity();
       entangled_player.applyGravity();
     }
+
     // Check for collision on each player in their respective world area
     onGround = player.update(checkCollisionList(player, environment.mainObjects), verticalBoundaries, currentFrame);
     entangled_onGround = entangled_player.update(checkCollisionList(entangled_player, environment.subObjects), verticalBoundaries, currentFrame);
@@ -76,38 +78,46 @@ void draw(){
     if (currentFrame == frameRate){
       currentFrame = 0;
     }
-    println("onGround: "+onGround);
-    println("entangled_onGround: "+entangled_onGround);
+    if (isColliding(player, entangled_player)){
+      exit();
+    }
   }
 }
 
 void keyPressed(){
-// move character using 'a', 's', 'd', 'w'
-  if (key == 'a'){
-    player.change_x = - MOVE_SPEED;
-    entangled_player.change_x = - MOVE_SPEED;
-  }
-  else if (key == 'd'){
-    player.change_x = MOVE_SPEED;
-    entangled_player.change_x = MOVE_SPEED;
-  }
-  else if (key == 'w'){
-    player.change_y = 0 - MOVE_SPEED;
-    entangled_player.change_y = - MOVE_SPEED;
-  }
-  else if (key == 's'){
-    player.change_y = MOVE_SPEED;
-    entangled_player.change_y = MOVE_SPEED;
-  }
-  // Space key is different as it is used for jump. This requires a more complex function to calculate gravity and other forces
-  else if (key == ' '){
-    if (onGround){
-      player.change_y = -10;
-      onGround = false;
+  if (environment.movementEnabled){
+  // move character using 'a', 's', 'd', 'w'
+    if (key == 'a'){
+      player.change_x = - MOVE_SPEED;
+      entangled_player.change_x = - MOVE_SPEED;
     }
-    if (entangled_onGround){
-      entangled_player.change_y = -10;
-      entangled_onGround = false;
+    else if (key == 'd'){
+      player.change_x = MOVE_SPEED;
+      entangled_player.change_x = MOVE_SPEED;
+    }
+    else if (key == 'w' && !environment.type.equals("platform")){
+      player.change_y = 0 - MOVE_SPEED;
+      entangled_player.change_y = - MOVE_SPEED;
+    }
+    else if (key == 's'){
+      player.change_y = MOVE_SPEED;
+      entangled_player.change_y = MOVE_SPEED;
+    }
+    // Space key is different as it is used for jump. This requires a more complex function to calculate gravity and other forces
+    else if (key == ' ' && environment.type.equals("platform")){
+      if (onGround){
+        player.change_y = -10;
+        onGround = false;
+      }
+      if (entangled_onGround){
+        entangled_player.change_y = -10;
+        entangled_onGround = false;
+      }
+    }
+  }
+  else if (!environment.movementEnabled && environment.type == "color_match"){
+    if (key == ' '){
+      // Rotate the player's color
     }
   }
   return;
