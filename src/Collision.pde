@@ -27,12 +27,14 @@ public boolean isColliding(DynamicSprite s1, Sprite s2){
     }
 }
 
-public void ensureInBounds(DynamicSprite s1, ArrayList<Actor> boundaries){
+public boolean ensureInBounds(DynamicSprite s1, ArrayList<Actor> boundaries){
+    boolean colliding = false;
     for (Actor boundary: boundaries){
         if (
         boundary.getTop() < s1.getBottom() + s1.change_y &&
         boundary.getBottom() > s1.getTop() + s1.change_y
         ){
+            colliding = true;
             if (s1.change_y > 0){
                 if (s1.getBottom() + s1.change_y > boundary.getTop()){
                     s1.setBottom(boundary.getTop());
@@ -48,6 +50,7 @@ public void ensureInBounds(DynamicSprite s1, ArrayList<Actor> boundaries){
             }
         }
     }
+    return colliding;
 }
 
 // Fix weird snapping issues with resolveCollision functions
