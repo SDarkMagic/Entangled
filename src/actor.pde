@@ -9,8 +9,9 @@ public class Actor{
   float change_y;
   int baseColor;
   float thickness;
+  String name;
 
-  public Actor(float scale, float x, float y, float sizeX, float sizeY, int rgb, float strokeThickness){
+  public Actor(String actorName, float scale, float x, float y, float sizeX, float sizeY, int rgb, float strokeThickness){
     center_x = x;
     center_y = y;
     change_x = 0;
@@ -20,10 +21,15 @@ public class Actor{
     baseColor = rgb;
     thickness = strokeThickness;
     sprite = null;
+    name = actorName;
+  }
+
+  public Actor(float scale, float x, float y, float sizeX, float sizeY, int rgb, float strokeThickness){
+    this("", scale, x, y, sizeX, sizeY, rgb, strokeThickness);
   }
 
   public Actor(float scale, float x, float y, float sizeX, float sizeY, int rgb){
-    this(scale, x, y, sizeX, sizeY, rgb, 3);
+    this("", scale, x, y, sizeX, sizeY, rgb, 3);
   }
 
   public Actor(float scale, float x, float y, float sizeX, float sizeY){
@@ -44,6 +50,7 @@ public class Actor{
     h = sprite.height * scale;
     baseColor = 0;
     thickness = 0;
+    name = fileName;
   }
 
   public Actor(){}
@@ -87,7 +94,7 @@ public class Actor{
     }
     else{
         strokeWeight(thickness);
-        line(center_x - w/2, center_y - h/2, w, h);
+        line(center_x - w/2, center_y - h/2, center_x + w/2, center_y + h/2);
     }
   }
 }
@@ -97,6 +104,11 @@ public class DynamicActor extends Actor{
   float mass;
   float change_x;
   float change_y;
+
+  public DynamicActor(String name, float scale, float x, float y, float w, float h, int rgb, float objectMass, float strokeThickness){
+    super(name, scale, x, y, w, h, rgb, strokeThickness);
+    mass = objectMass;
+  }
 
   public DynamicActor(float scale, float x, float y, float w, float h, int rgb, float objectMass, float strokeThickness){
     super(scale, x, y, w, h, rgb, strokeThickness);
@@ -108,10 +120,20 @@ public class DynamicActor extends Actor{
     mass = objectMass;
   }
 
+  public DynamicActor(String fileName, float scale, float x, float y){
+    super(fileName, scale, x, y);
+    mass = 0;
+  }
+
   public boolean update(ArrayList<Actor> collisions, ArrayList<Actor> verticalBounds, int frame){
     boolean colliding = ensureInBounds(this, verticalBounds);
     if(collisions.size() > 0){
-      resolveCollision(this, collisions.get(0));
+      for (Actor object: collisions){
+        if (object.name.equals("goal")){
+            nextLevel();
+        }
+        resolveCollision(this, object);
+      }
       colliding = true;
     }
     else {

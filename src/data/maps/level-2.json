@@ -1,5 +1,5 @@
 {
-    "background": 7112900,
+    "background": 407568,
     "spawn": {
         "X": 4,
         "Y": 0
@@ -10,7 +10,7 @@
     },
     "movement_enabled": true,
     "type": "platform",
-    "description": "Test level for developing new mechanics.",
+    "description": "Second Test level for developing post level continuing.",
     "objects_main": [
         {
             "is_dynamic": false,
@@ -37,13 +37,13 @@
             "use_sprite": false,
             "name": "goal",
             "translate": {
-                "X": 1.0,
+                "X": 20.0,
                 "Y": 5.0
             },
             "width": 0.0,
             "height": 10.0,
             "thickness": 3.0,
-            "color": 0,
+            "color": 7112900,
             "scale": 1.0
         }
     ],

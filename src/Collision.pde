@@ -1,44 +1,41 @@
 public boolean isColliding(Actor s1, Actor s2){
-    if (
-        s2.getLeft() < s1.getRight() + s1.change_x &&
-        s2.getRight() > s1.getLeft() + s1.change_x &&
-        s2.getTop() < s1.getBottom() + s1.change_y &&
-        s2.getBottom() > s1.getTop() + s1.change_y
+    if (s2.getTop() >= s1.getBottom() + s1.change_y ||
+        s2.getBottom() <= s1.getTop() - s1.change_y ||
+        s2.getRight() <= s1.getLeft() - s1.change_x ||
+        s2.getLeft() >= s1.getRight() + s1.change_x
     ){
-        return true;
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 
 public boolean isColliding(DynamicActor s1, Actor s2){
     // Check if the next position will be a collision at all.
-    if (
-        s2.getLeft() < s1.getRight() + s1.change_x &&
-        s2.getRight() > s1.getLeft() + s1.change_x &&
-        s2.getTop() < s1.getBottom() + s1.change_y &&
-        s2.getBottom() > s1.getTop() + s1.change_y
+    if (s2.getTop() >= s1.getBottom() + s1.change_y ||
+        s2.getBottom() <= s1.getTop() - s1.change_y ||
+        s2.getRight() <= s1.getLeft() - s1.change_x ||
+        s2.getLeft() >= s1.getRight() + s1.change_x
     ){
-        return true;
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 
 public boolean isColliding(DynamicActor s1, DynamicActor s2){
     // Check if the next position will be a collision at all.
-    if (
-        s2.getLeft() < s1.getRight() + s1.change_x &&
-        s2.getRight() > s1.getLeft() + s1.change_x &&
-        s2.getTop() < s1.getBottom() + s1.change_y &&
-        s2.getBottom() > s1.getTop() + s1.change_y
+    if (s2.getTop() >= s1.getBottom() + s1.change_y ||
+        s2.getBottom() <= s1.getTop() - s1.change_y ||
+        s2.getRight() <= s1.getLeft() - s1.change_x ||
+        s2.getLeft() >= s1.getRight() + s1.change_x
     ){
-        return true;
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 
@@ -72,96 +69,72 @@ public boolean ensureInBounds(DynamicActor s1, ArrayList<Actor> boundaries){
 public void resolveCollision(Actor s1, Actor s2){
     // Moving down
     if (s1.change_y > 0){
-        if (s1.getBottom() + s1.change_y > s2.getTop()){
-            s1.setBottom(s2.getTop());
-            s1.change_y = 0;
-        }
+        s1.setBottom(s2.getTop());
+        s1.change_y = 0;
     }
     // Moving up
     else if (s1.change_y < 0){
-        if (s1.getTop() + s1.change_y < s2.getBottom()){
-            s1.setTop(s2.getBottom());
-            s1.change_y = 0;
-        }
+        s1.setTop(s2.getBottom());
+        s1.change_y = 0;
     }
 
     // Moving right
     if (s1.change_x > 0){
-        if (s1.getRight() + s1.change_x > s2.getLeft()){
-            s1.setRight(s2.getLeft());
-            s1.change_x = 0;
-        }
+        s1.setRight(s2.getLeft());
+        s1.change_x = 0;
     }
     // Moving left
     else if (s1.change_x < 0){
-        if (s1.getLeft() + s1.change_x < s2.getRight()){
-            s1.setLeft(s2.getRight());
-            s1.change_x = 0;
-        }
+        s1.setLeft(s2.getRight());
+        s1.change_x = 0;
     }
 }
 
 public void resolveCollision(DynamicActor s1, Actor s2){
     // Moving down
     if (s1.change_y > 0){
-        if (s1.getBottom() + s1.change_y > s2.getTop()){
-            s1.setBottom(s2.getTop());
-            s1.change_y = 0;
-        }
+        s1.setBottom(s2.getTop());
+        s1.change_y = 0;
     }
     // Moving up
     else if (s1.change_y < 0){
-        if (s1.getTop() + s1.change_y < s2.getBottom()){
-            s1.setTop(s2.getBottom());
-            s1.change_y = 0;
-        }
+        s1.setTop(s2.getBottom());
+        s1.change_y = 0;
     }
 
     // Moving right
     if (s1.change_x > 0){
-        if (s1.getRight() + s1.change_x > s2.getLeft()){
-            s1.setRight(s2.getLeft());
-            s1.change_x = 0;
-        }
+        s1.setRight(s2.getLeft());
+        s1.change_x = 0;
     }
     // Moving left
     else if (s1.change_x < 0){
-        if (s1.getLeft() + s1.change_x < s2.getRight()){
-            s1.setLeft(s2.getRight());
-            s1.change_x = 0;
-        }
+        s1.setLeft(s2.getRight());
+        s1.change_x = 0;
     }
 }
 
 public void resolveCollision(DynamicActor s1, DynamicActor s2){
     // Moving down
     if (s1.change_y > 0){
-        if (s1.getBottom() + s1.change_y > s2.getTop()){
-            s1.setBottom(s2.getTop());
-            s1.change_y = 0;
-        }
+        s1.setBottom(s2.getTop());
+        s1.change_y = 0;
     }
     // Moving up
     else if (s1.change_y < 0){
-        if (s1.getTop() + s1.change_y < s2.getBottom()){
-            s1.setTop(s2.getBottom());
-            s1.change_y = 0;
-        }
+        s1.setTop(s2.getBottom());
+        s1.change_y = 0;
     }
 
     // Moving right
     if (s1.change_x > 0){
-        if (s1.getRight() + s1.change_x > s2.getLeft()){
-            s1.setRight(s2.getLeft());
-            s1.change_x = 0;
-        }
+        s1.setRight(s2.getLeft());
+        s1.change_x = 0;
     }
     // Moving left
     else if (s1.change_x < 0){
-        if (s1.getLeft() + s1.change_x < s2.getRight()){
-            s1.setLeft(s2.getRight());
-            s1.change_x = 0;
-        }
+        s1.setLeft(s2.getRight());
+        s1.change_x = 0;
     }
 }
 

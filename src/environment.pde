@@ -9,9 +9,11 @@ public class Map{
     String type;
     int backgroundColor;
     boolean movementEnabled;
+    String description;
 
     public Map(String mapFilePath){
       JSONObject json = loadJSONObject(mapFilePath);
+      description = json.getString("description");
       backgroundColor = json.getInt("background");
       spawn = getPosition(json.getJSONObject("spawn"));
       spawn2 = getPosition(json.getJSONObject("spawn2"));
@@ -23,22 +25,39 @@ public class Map{
 
     public void loadMapData(JSONArray data, ArrayList<Actor> staticStore, ArrayList<DynamicActor> dynamicStore){
       for (int i = 0; i < data.size(); i++){
+        String name;
+        float thickness;
+        int rgb;
         JSONObject entity = data.getJSONObject(i);
         FloatDict position = getPosition(entity.getJSONObject("translate"));
         boolean dynamic = entity.getBoolean("is_dynamic");
-        String name = entity.getString("name");
         float scale = entity.getFloat("scale");
-        if (dynamic){
-          dynamicStore.add(new DynamicActor(name, scale, position.get("x"), position.get("y"), entity.getFloat("mass")));
+
+        if (entity.getBoolean("use_sprite")){
+          name = entity.getString("name") + ".png";
+          if (dynamic){
+            dynamicStore.add(new DynamicActor(name, scale, position.get("x"), position.get("y"), entity.getFloat("mass")));
+          }
+          else {
+            staticStore.add(new Actor(name, scale, position.get("x"), position.get("y")));
+          }
         }
         else {
-          staticStore.add(new Actor(name, scale, position.get("x"), position.get("y")));
+          name = entity.getString("name");
+          thickness = entity.getFloat("thickness");
+          rgb = entity.getInt("color");
+          if (dynamic){
+            dynamicStore.add(new DynamicActor(name, scale, position.get("x"), position.get("y"), entity.getFloat("width") * 100, entity.getFloat("height") * 100, rgb, entity.getFloat("mass"), thickness));
+          }
+          else {
+            staticStore.add(new Actor(name, scale, position.get("x"), position.get("y"), entity.getFloat("width") * 100, entity.getFloat("height") * 100, rgb, thickness));
+          }
         }
       }
     }
 
     // Get the x & y coordinates from the map data for a given json object and format them into a float dict for easier access
-    public FloatDict getPosition(JSONObject translate){
+    private FloatDict getPosition(JSONObject translate){
       FloatDict position = new FloatDict();
       position.set("x", translate.getFloat("X") * 100);
       position.set("y", translate.getFloat("Y") * 100);

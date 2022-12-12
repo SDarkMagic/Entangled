@@ -8,7 +8,7 @@ and how they relate to quantum entanglement. Additionally, I will be adding more
 
 //declare global variables
 static float MOVE_SPEED = 5;
-static float PLAYER_MASS = 3.25;
+static float PLAYER_MASS = 1.5;
 static float GRAVITY = 9.8;
 
 DynamicActor player;
@@ -22,22 +22,51 @@ Actor divider;
 Actor floor;
 Map environment;
 ArrayList<Actor> verticalBoundaries;
+String levels[] = new String[3];
+int currentLevel;
+boolean levelComplete;
+PostLevelMenu postLevel;
 
 void setup(){
-  menu = new MainMenu(this);
+  menu = new MainMenu(this, "Entangled", "A Game About Quantum Entanglement");
+  postLevel = new PostLevelMenu(this);
   inLevel = false;
+  levelComplete = false;
   verticalBoundaries = new ArrayList<Actor>();
   size(displayWidth, displayHeight);
   frameRate(60);
   imageMode(CENTER);
+  textAlign(CENTER);
   currentFrame = 0;
+  currentLevel = 0;
+  levels[0] = "test";
+  levels[1] = "level-2";
+  menu.display();
+}
+
+public void nextLevel(){
+  //noLoop();
+  postLevel.display();
+  currentLevel++;
+  inLevel = false;
+  if (postLevel.next.isPressed()){
+    environment = postLevel.loadLevel(levels[currentLevel]);
+    player = new DynamicActor("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), PLAYER_MASS);
+    entangled_player = new DynamicActor("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
+    inLevel = true;
+  }
+  else if(postLevel.quit.isPressed()){
+    exit();
+  }
+  //loop();
+  levelComplete = false;
 }
 
 void draw(){
   if (!menu.play.isPressed() && !inLevel){
   }
-  else if (menu.play.isPressed() && !inLevel){
-    environment = menu.loadLevel("test");
+  else if ((menu.play.isPressed() || levelComplete) && !inLevel){
+    environment = menu.loadLevel(levels[currentLevel]);
     divider = new Actor(1.0, width/2, height/2, width, 3);
     floor = new Actor(1.0, width/2, height - 2, width, 3);
     verticalBoundaries.add(divider);
@@ -52,6 +81,8 @@ void draw(){
     inLevel = true;
   }
   else if (inLevel){
+    postLevel.hideMenu();
+    textSize(32);
     currentFrame++;
     background(environment.backgroundColor);
     // Draw the screen divider
@@ -65,7 +96,6 @@ void draw(){
     for (Actor object: environment.subObjects){
       object.display();
     }
-
     // Add gravity every frame if the level is a platforming level
     if (environment.type.equals("platform")){
       player.applyForce(GRAVITY);
@@ -77,56 +107,60 @@ void draw(){
     entangled_onGround = entangled_player.update(checkCollisionList(entangled_player, environment.subObjects), verticalBoundaries, currentFrame);
     player.display();
     entangled_player.display();
+    text(environment.description, width/2, 75); // Draw the text after everything else so it renders on top
     if (currentFrame == frameRate){
       currentFrame = 0;
     }
     if (isColliding(player, entangled_player)){
-      exit();
+      setup();
     }
   }
 }
 
 void keyPressed(){
-  if (environment.movementEnabled){
-  // move character using 'a', 's', 'd', 'w'
-    if (key == 'a'){
-      player.change_x = - MOVE_SPEED;
-      entangled_player.change_x = - MOVE_SPEED;
-    }
-    else if (key == 'd'){
-      player.change_x = MOVE_SPEED;
-      entangled_player.change_x = MOVE_SPEED;
-    }
-    else if (key == 'w' && !environment.type.equals("platform")){
-      player.change_y = 0 - MOVE_SPEED;
-      entangled_player.change_y = - MOVE_SPEED;
-    }
-    else if (key == 's'){
-      player.change_y = MOVE_SPEED;
-      entangled_player.change_y = MOVE_SPEED;
-    }
-    // Space key is different as it is used for jump. This requires a more complex function to calculate gravity and other forces
-    else if (key == ' ' && environment.type.equals("platform")){
-      if (onGround){
-        player.change_y = -10;
-        onGround = false;
+  if (inLevel){
+    if (environment.movementEnabled){
+    // move character using 'a', 's', 'd', 'w'
+      if (key == 'a'){
+        player.change_x = - MOVE_SPEED;
+        entangled_player.change_x = - MOVE_SPEED;
       }
-      if (entangled_onGround){
-        entangled_player.change_y = -10;
-        entangled_onGround = false;
+      else if (key == 'd'){
+        player.change_x = MOVE_SPEED;
+        entangled_player.change_x = MOVE_SPEED;
+      }
+      else if (key == 'w' && !environment.type.equals("platform")){
+        player.change_y = 0 - MOVE_SPEED;
+        entangled_player.change_y = - MOVE_SPEED;
+      }
+      else if (key == 's'){
+        player.change_y = MOVE_SPEED;
+        entangled_player.change_y = MOVE_SPEED;
+      }
+      // Space key is different as it is used for jump. This requires a more complex function to calculate gravity and other forces
+      else if (key == ' ' && environment.type.equals("platform")){
+        if (onGround){
+          player.change_y = -10;
+          onGround = false;
+        }
+        if (entangled_onGround){
+          entangled_player.change_y = -10;
+          entangled_onGround = false;
+        }
       }
     }
-  }
-  else if (!environment.movementEnabled && environment.type == "color_match"){
-    if (key == ' '){
-      // Rotate the player's color
+    else if (!environment.movementEnabled && environment.type == "color_match"){
+      if (key == ' '){
+        // Rotate the player's color
+      }
     }
   }
   return;
 }
 
 void keyReleased(){
-// if key is released, set change_x, change_y back to 0
+  if (inLevel){
+  // if key is released, set change_x, change_y back to 0
   if (key == 'a' || key == 'd'){
     player.change_x = 0;
     entangled_player.change_x = 0;
@@ -134,5 +168,6 @@ void keyReleased(){
   else if (key == 'w' || key == 's'){
     player.change_y = 0;
     entangled_player.change_y = 0;
+  }
   }
 }
