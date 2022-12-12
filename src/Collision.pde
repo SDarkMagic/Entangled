@@ -39,14 +39,14 @@ public boolean isColliding(DynamicActor s1, DynamicActor s2){
     }
 }
 
-public boolean ensureInBounds(DynamicActor s1, ArrayList<Actor> boundaries){
-    boolean colliding = false;
+public int ensureInBounds(DynamicActor s1, ArrayList<Actor> boundaries){
+    int colliding = 0;
     for (Actor boundary: boundaries){
         if (
         boundary.getTop() < s1.getBottom() + s1.change_y &&
         boundary.getBottom() > s1.getTop() + s1.change_y
         ){
-            colliding = true;
+            colliding = 1;
             if (s1.change_y > 0){
                 if (s1.getBottom() + s1.change_y > boundary.getTop()){
                     s1.setBottom(boundary.getTop());
@@ -79,7 +79,7 @@ public void resolveCollision(Actor s1, Actor s2){
     }
 
     // Moving right
-    if (s1.change_x > 0){
+    else if (s1.change_x > 0){
         s1.setRight(s2.getLeft());
         s1.change_x = 0;
     }

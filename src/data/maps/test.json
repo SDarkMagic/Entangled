@@ -37,7 +37,7 @@
             "use_sprite": false,
             "name": "goal",
             "translate": {
-                "X": 1.0,
+                "X": 6.0,
                 "Y": 5.0
             },
             "width": 0.0,
@@ -67,6 +67,20 @@
                 "Y": 3.5
             },
             "scale": 0.5
+        },
+        {
+            "is_dynamic": false,
+            "use_sprite": false,
+            "name": "goal",
+            "translate": {
+                "X": 6.0,
+                "Y": 5.0
+            },
+            "width": 0.0,
+            "height": 10.0,
+            "thickness": 3.0,
+            "color": 0,
+            "scale": 1.0
         }
     ]
 }

@@ -13,8 +13,8 @@ static float GRAVITY = 9.8;
 
 DynamicActor player;
 DynamicActor entangled_player;
-boolean onGround;
-boolean entangled_onGround;
+int colliding;
+int entangledColliding;
 int currentFrame;
 boolean inLevel;
 MainMenu menu;
@@ -33,7 +33,7 @@ void setup(){
   inLevel = false;
   levelComplete = false;
   verticalBoundaries = new ArrayList<Actor>();
-  size(displayWidth, displayHeight);
+  fullScreen();
   frameRate(60);
   imageMode(CENTER);
   textAlign(CENTER);
@@ -49,6 +49,7 @@ public void nextLevel(){
   postLevel.display();
   currentLevel++;
   inLevel = false;
+  println(postLevel.next.isPressed());
   if (postLevel.next.isPressed()){
     environment = postLevel.loadLevel(levels[currentLevel]);
     player = new DynamicActor("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), PLAYER_MASS);
@@ -81,73 +82,20 @@ void draw(){
     inLevel = true;
   }
   else if (inLevel){
-    postLevel.hideMenu();
-    textSize(32);
     currentFrame++;
-    background(environment.backgroundColor);
-    // Draw the screen divider
-    strokeWeight(3);
-    for (Actor boundary: verticalBoundaries){
-      line(0, boundary.center_y, boundary.w, boundary.center_y);
-    }
-    for (Actor object: environment.mainObjects){
-      object.display();
-    }
-    for (Actor object: environment.subObjects){
-      object.display();
-    }
-    // Add gravity every frame if the level is a platforming level
-    if (environment.type.equals("platform")){
-      player.applyForce(GRAVITY);
-      entangled_player.applyForce(GRAVITY);
-    }
-
-    // Check for collision on each player in their respective world area
-    onGround = player.update(checkCollisionList(player, environment.mainObjects), verticalBoundaries, currentFrame);
-    entangled_onGround = entangled_player.update(checkCollisionList(entangled_player, environment.subObjects), verticalBoundaries, currentFrame);
-    player.display();
-    entangled_player.display();
-    text(environment.description, width/2, 75); // Draw the text after everything else so it renders on top
+    int[] collisions = updatePhysics(player, entangled_player, verticalBoundaries, environment, currentFrame);
+    colliding = collisions[0];
+    entangledColliding = collisions[1];
     if (currentFrame == frameRate){
       currentFrame = 0;
-    }
-    if (isColliding(player, entangled_player)){
-      setup();
     }
   }
 }
 
 void keyPressed(){
   if (inLevel){
-    if (environment.movementEnabled){
-    // move character using 'a', 's', 'd', 'w'
-      if (key == 'a'){
-        player.change_x = - MOVE_SPEED;
-        entangled_player.change_x = - MOVE_SPEED;
-      }
-      else if (key == 'd'){
-        player.change_x = MOVE_SPEED;
-        entangled_player.change_x = MOVE_SPEED;
-      }
-      else if (key == 'w' && !environment.type.equals("platform")){
-        player.change_y = 0 - MOVE_SPEED;
-        entangled_player.change_y = - MOVE_SPEED;
-      }
-      else if (key == 's'){
-        player.change_y = MOVE_SPEED;
-        entangled_player.change_y = MOVE_SPEED;
-      }
-      // Space key is different as it is used for jump. This requires a more complex function to calculate gravity and other forces
-      else if (key == ' ' && environment.type.equals("platform")){
-        if (onGround){
-          player.change_y = -10;
-          onGround = false;
-        }
-        if (entangled_onGround){
-          entangled_player.change_y = -10;
-          entangled_onGround = false;
-        }
-      }
+    if (true){
+      physicsController(player, entangled_player, environment, MOVE_SPEED);
     }
     else if (!environment.movementEnabled && environment.type == "color_match"){
       if (key == ' '){

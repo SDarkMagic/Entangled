@@ -125,16 +125,18 @@ public class DynamicActor extends Actor{
     mass = 0;
   }
 
-  public boolean update(ArrayList<Actor> collisions, ArrayList<Actor> verticalBounds, int frame){
-    boolean colliding = ensureInBounds(this, verticalBounds);
+  public int update(ArrayList<Actor> collisions, ArrayList<Actor> verticalBounds, int frame){
+    int colliding = ensureInBounds(this, verticalBounds); //Value of 0 is no collision between actors
     if(collisions.size() > 0){
       for (Actor object: collisions){
         if (object.name.equals("goal")){
-            nextLevel();
+            colliding = 2; // Value of 2 means the player is colliding with a goal actor
         }
-        resolveCollision(this, object);
+        else {
+          resolveCollision(this, object);
+        }
       }
-      colliding = true;
+      colliding = 1;
     }
     else {
       center_x += change_x;
