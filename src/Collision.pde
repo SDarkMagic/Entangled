@@ -1,4 +1,4 @@
-public boolean isColliding(Sprite s1, Sprite s2){
+public boolean isColliding(Actor s1, Actor s2){
     if (
         s2.getLeft() < s1.getRight() + s1.change_x &&
         s2.getRight() > s1.getLeft() + s1.change_x &&
@@ -12,7 +12,7 @@ public boolean isColliding(Sprite s1, Sprite s2){
     }
 }
 
-public boolean isColliding(DynamicSprite s1, Sprite s2){
+public boolean isColliding(DynamicActor s1, Actor s2){
     // Check if the next position will be a collision at all.
     if (
         s2.getLeft() < s1.getRight() + s1.change_x &&
@@ -27,7 +27,7 @@ public boolean isColliding(DynamicSprite s1, Sprite s2){
     }
 }
 
-public boolean isColliding(DynamicSprite s1, DynamicSprite s2){
+public boolean isColliding(DynamicActor s1, DynamicActor s2){
     // Check if the next position will be a collision at all.
     if (
         s2.getLeft() < s1.getRight() + s1.change_x &&
@@ -42,7 +42,7 @@ public boolean isColliding(DynamicSprite s1, DynamicSprite s2){
     }
 }
 
-public boolean ensureInBounds(DynamicSprite s1, ArrayList<Actor> boundaries){
+public boolean ensureInBounds(DynamicActor s1, ArrayList<Actor> boundaries){
     boolean colliding = false;
     for (Actor boundary: boundaries){
         if (
@@ -69,7 +69,7 @@ public boolean ensureInBounds(DynamicSprite s1, ArrayList<Actor> boundaries){
 }
 
 // Fix weird snapping issues with resolveCollision functions
-public void resolveCollision(Sprite s1, Sprite s2){
+public void resolveCollision(Actor s1, Actor s2){
     // Moving down
     if (s1.change_y > 0){
         if (s1.getBottom() + s1.change_y > s2.getTop()){
@@ -101,7 +101,7 @@ public void resolveCollision(Sprite s1, Sprite s2){
     }
 }
 
-public void resolveCollision(DynamicSprite s1, Sprite s2){
+public void resolveCollision(DynamicActor s1, Actor s2){
     // Moving down
     if (s1.change_y > 0){
         if (s1.getBottom() + s1.change_y > s2.getTop()){
@@ -133,7 +133,7 @@ public void resolveCollision(DynamicSprite s1, Sprite s2){
     }
 }
 
-public void resolveCollision(DynamicSprite s1, DynamicSprite s2){
+public void resolveCollision(DynamicActor s1, DynamicActor s2){
     // Moving down
     if (s1.change_y > 0){
         if (s1.getBottom() + s1.change_y > s2.getTop()){
@@ -165,9 +165,9 @@ public void resolveCollision(DynamicSprite s1, DynamicSprite s2){
     }
 }
 
-public ArrayList<Sprite> checkCollisionList(Sprite s, ArrayList<Sprite> collisionList){
-    ArrayList<Sprite> colliders = new ArrayList<Sprite>();
-    for (Sprite item: collisionList){
+public ArrayList<Actor> checkCollisionList(Actor s, ArrayList<Actor> collisionList){
+    ArrayList<Actor> colliders = new ArrayList<Actor>();
+    for (Actor item: collisionList){
         if(isColliding(s, item)){
             colliders.add(item);
         }
@@ -175,9 +175,9 @@ public ArrayList<Sprite> checkCollisionList(Sprite s, ArrayList<Sprite> collisio
     return colliders;
 }
 
-public ArrayList<Sprite> checkCollisionList(DynamicSprite s, ArrayList<Sprite> collisionList){
-    ArrayList<Sprite> colliders = new ArrayList<Sprite>();
-    for (Sprite item: collisionList){
+public ArrayList<Actor> checkCollisionList(DynamicActor s, ArrayList<Actor> collisionList){
+    ArrayList<Actor> colliders = new ArrayList<Actor>();
+    for (Actor item: collisionList){
         if(isColliding(s, item)){
             colliders.add(item);
         }
@@ -185,12 +185,14 @@ public ArrayList<Sprite> checkCollisionList(DynamicSprite s, ArrayList<Sprite> c
     return colliders;
 }
 
-public ArrayList<DynamicSprite> checkCollisionList(DynamicSprite s, ArrayList<DynamicSprite> collisionList){
-    ArrayList<DynamicSprite> colliders = new ArrayList<DynamicSprite>();
-    for (DynamicSprite item: collisionList){
+/*
+public ArrayList<DynamicActor> checkCollisionList(DynamicActor s, ArrayList<DynamicActor> collisionList){
+    ArrayList<DynamicActor> colliders = new ArrayList<DynamicActor>();
+    for (DynamicActor item: collisionList){
         if(isColliding(s, item)){
             colliders.add(item);
         }
     }
     return colliders;
 }
+*/

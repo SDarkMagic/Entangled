@@ -1,27 +1,49 @@
-static float GRAVITY = 9.8;
+//static float GRAVITY = 9.8;
 
 // Abstract class for handling entities to make collision processing easier
 public class Actor{
   float center_x, center_y;
   float w, h;
+  PImage sprite;
+  float change_x;
+  float change_y;
   int baseColor;
   float thickness;
 
   public Actor(float scale, float x, float y, float sizeX, float sizeY, int rgb, float strokeThickness){
     center_x = x;
     center_y = y;
+    change_x = 0;
+    change_y = 0;
     w = sizeX * scale;
     h = sizeY * scale;
     baseColor = rgb;
     thickness = strokeThickness;
+    sprite = null;
+  }
+
+  public Actor(float scale, float x, float y, float sizeX, float sizeY, int rgb){
+    this(scale, x, y, sizeX, sizeY, rgb, 3);
   }
 
   public Actor(float scale, float x, float y, float sizeX, float sizeY){
-    this(scale, x, y, sizeX, sizeY, 0, 3);
+    this(scale, x, y, sizeX, sizeY, 0);
   }
 
   public Actor(float scale, float x, float y){
     this(scale, x, y, 0, 0, 0);
+  }
+
+  public Actor(String fileName, float scale, float x, float y){
+    sprite = loadImage(fileName);
+    center_x = x;
+    center_y = y;
+    change_x = 0;
+    change_y = 0;
+    w = sprite.width * scale;
+    h = sprite.height * scale;
+    baseColor = 0;
+    thickness = 0;
   }
 
   public Actor(){}
@@ -60,8 +82,13 @@ public class Actor{
   }
 
   public void display(){
-    strokeWeight();
-    line(center_x - w/2, center_y - h/2, w, h);
+    if (sprite != null){
+        image(sprite, center_x, center_y, w, h);
+    }
+    else{
+        strokeWeight(thickness);
+        line(center_x - w/2, center_y - h/2, w, h);
+    }
   }
 }
 
@@ -71,14 +98,27 @@ public class DynamicActor extends Actor{
   float change_x;
   float change_y;
 
-  public DynamicActor(float scale, float x, float y, float w, float h, int rgb, float objectMass, float stokeThickness){
+  public DynamicActor(float scale, float x, float y, float w, float h, int rgb, float objectMass, float strokeThickness){
     super(scale, x, y, w, h, rgb, strokeThickness);
     mass = objectMass;
   }
 
-  public boolean update(ArrayList<Sprite> collisions, ArrayList<Actor> verticalBounds, int frame){
-    center_x += change_x;
-    center_y += change_y;
+  public DynamicActor(String fileName, float scale, float x, float y, float objectMass){
+    super(fileName, scale, x, y);
+    mass = objectMass;
+  }
+
+  public boolean update(ArrayList<Actor> collisions, ArrayList<Actor> verticalBounds, int frame){
+    boolean colliding = ensureInBounds(this, verticalBounds);
+    if(collisions.size() > 0){
+      resolveCollision(this, collisions.get(0));
+      colliding = true;
+    }
+    else {
+      center_x += change_x;
+      center_y += change_y;
+    }
+    return colliding;
   }
 
   public void applyForce(float force){

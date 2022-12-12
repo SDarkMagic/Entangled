@@ -8,9 +8,11 @@ and how they relate to quantum entanglement. Additionally, I will be adding more
 
 //declare global variables
 static float MOVE_SPEED = 5;
-static float playerMass = 1.25;
-DynamicSprite player;
-DynamicSprite entangled_player;
+static float PLAYER_MASS = 3.25;
+static float GRAVITY = 9.8;
+
+DynamicActor player;
+DynamicActor entangled_player;
 boolean onGround;
 boolean entangled_onGround;
 int currentFrame;
@@ -40,9 +42,9 @@ void draw(){
     floor = new Actor(1.0, width/2, height - 2, width, 3);
     verticalBoundaries.add(divider);
     verticalBoundaries.add(floor);
-    player = new DynamicSprite("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), playerMass);
-    entangled_player = new DynamicSprite("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, playerMass);
-    for (Sprite object: environment.subObjects){
+    player = new DynamicActor("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), PLAYER_MASS);
+    entangled_player = new DynamicActor("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
+    for (Actor object: environment.subObjects){
       // Offset the center of the sub sprites to make duplicating layouts easier
       object.center_y += divider.center_y;
     }
@@ -57,17 +59,17 @@ void draw(){
     for (Actor boundary: verticalBoundaries){
       line(0, boundary.center_y, boundary.w, boundary.center_y);
     }
-    for (Sprite object: environment.mainObjects){
+    for (Actor object: environment.mainObjects){
       object.display();
     }
-    for (Sprite object: environment.subObjects){
+    for (Actor object: environment.subObjects){
       object.display();
     }
 
     // Add gravity every frame if the level is a platforming level
     if (environment.type.equals("platform")){
-      player.applyGravity();
-      entangled_player.applyGravity();
+      player.applyForce(GRAVITY);
+      entangled_player.applyForce(GRAVITY);
     }
 
     // Check for collision on each player in their respective world area

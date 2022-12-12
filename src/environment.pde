@@ -1,8 +1,8 @@
 public class Map{
-    ArrayList<Sprite> mainObjects = new ArrayList<Sprite>();
-    ArrayList<DynamicSprite> mainDynamicObjects = new ArrayList<DynamicSprite>();
-    ArrayList<Sprite> subObjects = new ArrayList<Sprite>();
-    ArrayList<DynamicSprite> subDynamicObjects = new ArrayList<DynamicSprite>();
+    ArrayList<Actor> mainObjects = new ArrayList<Actor>();
+    ArrayList<DynamicActor> mainDynamicObjects = new ArrayList<DynamicActor>();
+    ArrayList<Actor> subObjects = new ArrayList<Actor>();
+    ArrayList<DynamicActor> subDynamicObjects = new ArrayList<DynamicActor>();
     JSONArray data;
     FloatDict spawn;
     FloatDict spawn2;
@@ -21,7 +21,7 @@ public class Map{
       loadMapData(json.getJSONArray("objects_sub"), subObjects, subDynamicObjects);
     }
 
-    public void loadMapData(JSONArray data, ArrayList<Sprite> staticStore, ArrayList<DynamicSprite> dynamicStore){
+    public void loadMapData(JSONArray data, ArrayList<Actor> staticStore, ArrayList<DynamicActor> dynamicStore){
       for (int i = 0; i < data.size(); i++){
         JSONObject entity = data.getJSONObject(i);
         FloatDict position = getPosition(entity.getJSONObject("translate"));
@@ -29,10 +29,10 @@ public class Map{
         String name = entity.getString("name");
         float scale = entity.getFloat("scale");
         if (dynamic){
-          dynamicStore.add(new DynamicSprite(name, scale, position.get("x"), position.get("y"), entity.getFloat("mass")));
+          dynamicStore.add(new DynamicActor(name, scale, position.get("x"), position.get("y"), entity.getFloat("mass")));
         }
         else {
-          staticStore.add(new Sprite(name, scale, position.get("x"), position.get("y")));
+          staticStore.add(new Actor(name, scale, position.get("x"), position.get("y")));
         }
       }
     }
