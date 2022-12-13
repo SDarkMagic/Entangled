@@ -97,6 +97,29 @@ public class Actor{
         line(center_x - w/2, center_y - h/2, center_x + w/2, center_y + h/2);
     }
   }
+  public boolean isColliding(Actor s2){
+    if (s2.getTop() < this.getBottom() + this.change_y &&
+        s2.getBottom() > this.getTop() - this.change_y &&
+        s2.getRight() > this.getLeft() - this.change_x &&
+        s2.getLeft() < this.getRight() + this.change_x
+    ){
+        return true;
+    }
+    else {
+        return false;
+    }
+  }
+
+  public ArrayList<Actor> checkCollisionList(ArrayList<Actor> collisionList){
+    ArrayList<Actor> colliders = new ArrayList<Actor>();
+    for (Actor item: collisionList){
+        if(this.isColliding(item)){
+            colliders.add(item);
+        }
+    }
+    return colliders;
+  }
+
 }
 
 // Simple extension of the actor class that is capable of being repositioned each frame and detecting collision
@@ -125,15 +148,40 @@ public class DynamicActor extends Actor{
     mass = 0;
   }
 
-  public int update(ArrayList<Actor> collisions, ArrayList<Actor> verticalBounds, int frame){
+  public void resolveCollision(Actor s2){
+    // Moving down
+    if (this.change_y > 0){
+        this.setBottom(s2.getTop());
+        this.change_y = 0;
+    }
+    // Moving up
+    if (this.change_y < 0){
+        this.setTop(s2.getBottom());
+        this.change_y = 0;
+    }
+
+    // Moving right
+    if (this.change_x > 0){
+        this.setRight(s2.getLeft());
+        this.change_x = 0;
+    }
+    // Moving left
+    if (this.change_x < 0){
+        this.setLeft(s2.getRight());
+        this.change_x = 0;
+    }
+  }
+
+  public int update(ArrayList<Actor> mapObjects, ArrayList<Actor> verticalBounds, int frame){
     int colliding = ensureInBounds(this, verticalBounds); //Value of 0 is no collision between actors
+    ArrayList<Actor> collisions = this.checkCollisionList(mapObjects);
     if(collisions.size() > 0){
       for (Actor object: collisions){
         if (object.name.equals("goal")){
             colliding = 2; // Value of 2 means the player is colliding with a goal actor
         }
         else {
-          resolveCollision(this, object);
+          this.resolveCollision(object);
         }
       }
       colliding = 1;

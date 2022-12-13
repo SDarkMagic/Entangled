@@ -22,15 +22,15 @@ public int[] updatePhysics(DynamicActor player, DynamicActor entangled_player, A
     }
 
     // Check for collision on each player in their respective world area
-    colliding = player.update(checkCollisionList(player, environment.mainObjects), verticalBoundaries, currentFrame);
-    entangledColliding = entangled_player.update(checkCollisionList(entangled_player, environment.subObjects), verticalBoundaries, currentFrame);
+    colliding = player.update(environment.mainObjects, verticalBoundaries, currentFrame);
+    entangledColliding = entangled_player.update(environment.subObjects, verticalBoundaries, currentFrame);
     player.display();
     entangled_player.display();
     text(environment.description, width/2, 75); // Draw the text after everything else so it renders on top
     if (colliding == 2 && entangledColliding == 2){
       nextLevel();
     }
-    if (isColliding(player, entangled_player)){
+    if (player.isColliding(entangled_player)){
       setup();
     }
     int[] collisions = {colliding, entangledColliding};
