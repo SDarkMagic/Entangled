@@ -97,7 +97,7 @@ public void resolveCollision(DynamicActor s1, Actor s2){
         s1.change_y = 0;
     }
     // Moving up
-    else if (s1.change_y < 0){
+    if (s1.change_y < 0){
         s1.setTop(s2.getBottom());
         s1.change_y = 0;
     }
@@ -108,7 +108,7 @@ public void resolveCollision(DynamicActor s1, Actor s2){
         s1.change_x = 0;
     }
     // Moving left
-    else if (s1.change_x < 0){
+    if (s1.change_x < 0){
         s1.setLeft(s2.getRight());
         s1.change_x = 0;
     }

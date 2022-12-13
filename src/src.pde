@@ -56,7 +56,7 @@ public void nextLevel(){
     entangled_player = new DynamicActor("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
     inLevel = true;
   }
-  else if(postLevel.quit.isPressed()){
+  if(postLevel.quit.isPressed()){
     exit();
   }
   //loop();
@@ -66,7 +66,7 @@ public void nextLevel(){
 void draw(){
   if (!menu.play.isPressed() && !inLevel){
   }
-  else if ((menu.play.isPressed() || levelComplete) && !inLevel){
+  if ((menu.play.isPressed() || levelComplete) && !inLevel){
     environment = menu.loadLevel(levels[currentLevel]);
     divider = new Actor(1.0, width/2, height/2, width, 3);
     floor = new Actor(1.0, width/2, height - 2, width, 3);
@@ -81,7 +81,7 @@ void draw(){
     menu.hide(menu.play);
     inLevel = true;
   }
-  else if (inLevel){
+  if (inLevel){
     currentFrame++;
     int[] collisions = updatePhysics(player, entangled_player, verticalBoundaries, environment, currentFrame);
     colliding = collisions[0];
@@ -97,7 +97,7 @@ void keyPressed(){
     if (true){
       physicsController(player, entangled_player, environment, MOVE_SPEED);
     }
-    else if (!environment.movementEnabled && environment.type == "color_match"){
+    if (!environment.movementEnabled && environment.type == "color_match"){
       if (key == ' '){
         // Rotate the player's color
       }
@@ -113,7 +113,7 @@ void keyReleased(){
     player.change_x = 0;
     entangled_player.change_x = 0;
   }
-  else if (key == 'w' || key == 's'){
+  if (key == 'w' || key == 's'){
     player.change_y = 0;
     entangled_player.change_y = 0;
   }
