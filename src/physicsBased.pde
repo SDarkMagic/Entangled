@@ -1,20 +1,7 @@
-public int[] updatePhysics(DynamicActor player, DynamicActor entangled_player, ArrayList<Actor> verticalBoundaries, Map environment, int currentFrame){
+public int[] updatePhysics(DynamicActor player, DynamicActor entangled_player, Map environment, int currentFrame){
     int colliding;
     int entangledColliding;
-    postLevel.hideMenu();
-    textSize(32);
-    background(environment.backgroundColor);
-    // Draw the screen divider
-    strokeWeight(3);
-    for (Actor boundary: verticalBoundaries){
-      line(0, boundary.center_y, boundary.w, boundary.center_y);
-    }
-    for (Actor object: environment.mainObjects){
-      object.display();
-    }
-    for (Actor object: environment.subObjects){
-      object.display();
-    }
+    environment.display(postLevel);
     // Add gravity every frame if the level is a platforming level
     if (environment.type.equals("platform")){
       player.applyForce(GRAVITY);
@@ -22,8 +9,8 @@ public int[] updatePhysics(DynamicActor player, DynamicActor entangled_player, A
     }
 
     // Check for collision on each player in their respective world area
-    colliding = player.update(environment.mainObjects, verticalBoundaries, currentFrame);
-    entangledColliding = entangled_player.update(environment.subObjects, verticalBoundaries, currentFrame);
+    colliding = player.update(environment.mainObjects, environment.boundaries, currentFrame);
+    entangledColliding = entangled_player.update(environment.subObjects, environment.boundaries, currentFrame);
     player.display();
     entangled_player.display();
     text(environment.description, width/2, 75); // Draw the text after everything else so it renders on top

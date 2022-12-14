@@ -21,7 +21,6 @@ MainMenu menu;
 Actor divider;
 Actor floor;
 Map environment;
-ArrayList<Actor> verticalBoundaries;
 String levels[] = new String[3];
 int currentLevel;
 boolean levelComplete;
@@ -32,7 +31,6 @@ void setup(){
   postLevel = new PostLevelMenu(this);
   inLevel = false;
   levelComplete = false;
-  verticalBoundaries = new ArrayList<Actor>();
   fullScreen();
   frameRate(60);
   imageMode(CENTER);
@@ -70,8 +68,6 @@ void draw(){
     environment = menu.loadLevel(levels[currentLevel]);
     divider = new Actor(1.0, width/2, height/2, width, 3);
     floor = new Actor(1.0, width/2, height - 2, width, 3);
-    verticalBoundaries.add(divider);
-    verticalBoundaries.add(floor);
     player = new DynamicActor("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), PLAYER_MASS);
     entangled_player = new DynamicActor("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
     for (Actor object: environment.subObjects){
@@ -83,7 +79,7 @@ void draw(){
   }
   if (inLevel){
     currentFrame++;
-    int[] collisions = updatePhysics(player, entangled_player, verticalBoundaries, environment, currentFrame);
+    int[] collisions = updatePhysics(player, entangled_player, environment, currentFrame);
     colliding = collisions[0];
     entangledColliding = collisions[1];
     if (currentFrame == frameRate){

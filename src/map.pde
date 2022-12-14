@@ -3,6 +3,7 @@ public class Map{
     ArrayList<DynamicActor> mainDynamicObjects = new ArrayList<DynamicActor>();
     ArrayList<Actor> subObjects = new ArrayList<Actor>();
     ArrayList<DynamicActor> subDynamicObjects = new ArrayList<DynamicActor>();
+    ArrayList<Actor> boundaries = new ArrayList<Actor>();
     JSONArray data;
     FloatDict spawn;
     FloatDict spawn2;
@@ -19,6 +20,8 @@ public class Map{
       spawn2 = getPosition(json.getJSONObject("spawn2"));
       type = json.getString("type");
       movementEnabled = json.getBoolean("movement_enabled");
+      boundaries.add(new Actor(1.0, width/2, height/2, width, 3));
+      boundaries.add(new Actor(1.0, width/2, height - 2, width, 3));
       loadMapData(json.getJSONArray("objects_main"), mainObjects, mainDynamicObjects);
       loadMapData(json.getJSONArray("objects_sub"), subObjects, subDynamicObjects);
     }
@@ -62,5 +65,22 @@ public class Map{
       position.set("x", translate.getFloat("X") * 100);
       position.set("y", translate.getFloat("Y") * 100);
       return position;
+    }
+
+    public void display(PostLevelMenu postLevel){
+      postLevel.hideMenu();
+      textSize(32);
+      background(this.backgroundColor);
+      // Draw the screen divider
+      strokeWeight(3);
+      for (Actor boundary: this.boundaries){
+        line(0, boundary.center_y, boundary.w, boundary.center_y);
+      }
+      for (Actor object: this.mainObjects){
+        object.display();
+      }
+      for (Actor object: this.subObjects){
+        object.display();
+      }
     }
 }

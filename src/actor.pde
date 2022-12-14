@@ -73,19 +73,19 @@ public class Actor{
   }
    // Methods for moving sprite edges
   public void setLeft(float left){
-    center_x = left + w/2;
+    center_x = left + 1 + w/2;
   }
 
   public void setRight(float right){
-    center_x = right - w/2;
+    center_x = right - 1 - w/2;
   }
 
   public void setTop(float top){
-    center_y = top + w/2;
+    center_y = top + 1 + w/2;
   }
 
   public void setBottom(float bottom){
-    center_y = bottom - w/2;
+    center_y = bottom - 1 - w/2;
   }
 
   public void display(){
@@ -98,10 +98,10 @@ public class Actor{
     }
   }
   public boolean isColliding(Actor s2){
-    if (s2.getTop() < this.getBottom() + this.change_y &&
-        s2.getBottom() > this.getTop() - this.change_y &&
-        s2.getRight() > this.getLeft() - this.change_x &&
-        s2.getLeft() < this.getRight() + this.change_x
+    if (s2.getTop() < this.getBottom() &&
+        s2.getBottom() > this.getTop() &&
+        s2.getRight() > this.getLeft() &&
+        s2.getLeft() < this.getRight()
     ){
         return true;
     }
@@ -151,24 +151,24 @@ public class DynamicActor extends Actor{
   public void resolveCollision(Actor s2){
     // Moving down
     if (this.change_y > 0){
-        this.setBottom(s2.getTop());
-        this.change_y = 0;
+      this.setBottom(s2.getTop());
+      this.change_y = 0;
     }
     // Moving up
-    if (this.change_y < 0){
-        this.setTop(s2.getBottom());
-        this.change_y = 0;
+    else if (this.change_y < 0){
+      this.setTop(s2.getBottom());
+      this.change_y = 0;
     }
 
     // Moving right
     if (this.change_x > 0){
-        this.setRight(s2.getLeft());
-        this.change_x = 0;
+      this.setRight(s2.getLeft());
+      this.change_x = 0;
     }
     // Moving left
-    if (this.change_x < 0){
-        this.setLeft(s2.getRight());
-        this.change_x = 0;
+    else if (this.change_x < 0){
+      this.setLeft(s2.getRight());
+      this.change_x = 0;
     }
   }
 
@@ -187,8 +187,8 @@ public class DynamicActor extends Actor{
       colliding = 1;
     }
     else {
-      center_x += change_x;
-      center_y += change_y;
+      this.center_x += this.change_x;
+      this.center_y += this.change_y;
     }
     return colliding;
   }
