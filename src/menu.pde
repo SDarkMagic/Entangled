@@ -87,3 +87,32 @@ class PostLevelMenu extends Menu{
         quit.setVisible(true);
     }
 }
+
+class FailMenu extends Menu{
+    Button retry;
+    Button quit;
+
+    public FailMenu(PApplet sketch){
+        super(sketch);
+        super.addButton("Retry");
+        super.addButton("Quit");
+        retry = super.getButton("Retry");
+        quit = super.getButton("Quit");
+        retry.setPosition(center_x - defaultWidth, center_y - 50).setSize(defaultWidth, defaultHeight);
+        quit.setPosition(center_x - defaultWidth, center_y + 50).setSize(defaultWidth, defaultHeight);
+        hide(retry);
+        hide(quit);
+    }
+
+    public void hideMenu(){
+        hide(retry);
+        hide(quit);
+    }
+
+    public void display(){
+        textSize(64);
+        text("Retry?", center_x, center_y - 100);
+        retry.setVisible(true);
+        quit.setVisible(true);
+    }
+}

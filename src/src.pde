@@ -25,10 +25,12 @@ String levels[] = new String[3];
 int currentLevel;
 boolean levelComplete;
 PostLevelMenu postLevel;
+FailMenu retryLevel;
 
 void setup(){
   menu = new MainMenu(this, "Entangled", "A Game About Quantum Entanglement");
   postLevel = new PostLevelMenu(this);
+  retryLevel = new FailMenu(this);
   inLevel = false;
   levelComplete = false;
   fullScreen();
@@ -79,11 +81,11 @@ void draw(){
   }
   if (inLevel){
     currentFrame++;
-    if (environment.type == "color_match"){
-      updatePhysics(player, entangled_player, environment, currentFrame);
+    if (environment.type.equals("color_match")){
+      updateColor(player, entangled_player, environment, currentFrame);
     }
     else {
-      updateColor(player, entangled_player, environment, currentFrame);
+      updatePhysics(player, entangled_player, environment, currentFrame);
     }
     if (currentFrame == frameRate){
       currentFrame = 0;

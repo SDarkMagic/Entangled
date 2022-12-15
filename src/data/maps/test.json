@@ -71,9 +71,9 @@
         {
             "is_dynamic": true,
             "use_sprite": false,
-            "name": "",
+            "name": "beam",
             "translate": {
-                "X": 6.0,
+                "X": 7.0,
                 "Y": 5.0
             },
             "motionIsVertical": false,
@@ -81,7 +81,7 @@
             "width": 0.0,
             "height": 10.0,
             "thickness": 3.0,
-            "color": 0,
+            "color": 1,
             "scale": 1.0
         },
         {

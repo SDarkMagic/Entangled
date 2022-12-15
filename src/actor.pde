@@ -182,6 +182,9 @@ public class DynamicActor extends Actor{
         if (object.name.equals("goal")){
             colliding = 2; // Value of 2 means the player is colliding with a goal actor
         }
+        if (object.name.equals("beam") && this.baseColor != object.baseColor){
+          colliding = 3; // Value of 3 means the player is colliding with a moving colored beam actor and the color does not match
+        }
         else{
           this.resolveCollision(object);
         }
