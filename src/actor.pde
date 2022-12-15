@@ -72,31 +72,35 @@ public class Actor{
     return center_y + h/2;
   }
    // Methods for moving sprite edges
-  public void setLeft(float left){
-    center_x = left + 1 + w/2;
+  public void setLeft(float edge){
+    center_x = edge + w/2;
   }
 
-  public void setRight(float right){
-    center_x = right - 1 - w/2;
+  public void setRight(float edge){
+    center_x = edge - w/2;
   }
 
-  public void setTop(float top){
-    center_y = top + 1 + w/2;
+  public void setTop(float edge){
+    center_y = edge + w/2;
   }
 
-  public void setBottom(float bottom){
-    center_y = bottom - 1 - w/2;
+  public void setBottom(float edge){
+    center_y = edge - w/2;
   }
 
   public void display(){
+    println(baseColor);
     if (sprite != null){
+        tint(baseColor);
         image(sprite, center_x, center_y, w, h);
     }
     else{
+        stroke(baseColor);
         strokeWeight(thickness);
         line(center_x - w/2, center_y - h/2, center_x + w/2, center_y + h/2);
     }
   }
+
   public boolean isColliding(Actor s2){
     if (s2.getTop() < this.getBottom() &&
         s2.getBottom() > this.getTop() &&
