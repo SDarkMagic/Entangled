@@ -2,15 +2,9 @@ public void updateColor(DynamicActor player, DynamicActor entangled_player, Map 
     int colliding;
     int entangledColliding;
 
-    // Add gravity every frame if the level is a platforming level
-    if (environment.type.equals("platform")){
-      player.applyForce(GRAVITY);
-      entangled_player.applyForce(GRAVITY);
-    }
-
     // Check for collision on each player in their respective world area
-    colliding = player.update(environment.mainObjects, environment.boundaries, currentFrame);
-    entangledColliding = entangled_player.update(environment.subObjects, environment.boundaries, currentFrame);
+    colliding = player.update(environment.mainDynamicObjects, environment.boundaries, currentFrame);
+    entangledColliding = entangled_player.update(environment.subDynamicObjects, environment.boundaries, currentFrame);
     player.display();
     entangled_player.display();
     text(environment.description, width/2, 75); // Draw the text after everything else so it renders on top

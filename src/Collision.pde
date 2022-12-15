@@ -1,4 +1,5 @@
 public int ensureInBounds(DynamicActor s1, ArrayList<Actor> boundaries){
+    // Checks if a DynamicActor is within the vertical space enclosed by the boudary Actors
     int colliding = 0;
     for (Actor boundary: boundaries){
         if (

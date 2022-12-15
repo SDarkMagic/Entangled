@@ -51,7 +51,7 @@ public void nextLevel(){
   if (postLevel.next.isPressed()){
     environment = postLevel.loadLevel(levels[currentLevel]);
     player = new DynamicActor("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), PLAYER_MASS);
-    entangled_player = new DynamicActor("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
+    entangled_player = new DynamicActor("player.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
     inLevel = true;
   }
   if(postLevel.quit.isPressed()){
@@ -69,7 +69,7 @@ void draw(){
     divider = new Actor(1.0, width/2, height/2, width, 3);
     floor = new Actor(1.0, width/2, height - 2, width, 3);
     player = new DynamicActor("player.png", 0.75, environment.spawn.get("x"), environment.spawn.get("y"), PLAYER_MASS);
-    entangled_player = new DynamicActor("player_entangled.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
+    entangled_player = new DynamicActor("player.png", 0.75, environment.spawn2.get("x"), environment.spawn2.get("y") + divider.center_y, PLAYER_MASS);
     for (Actor object: environment.subObjects){
       // Offset the center of the sub sprites to make duplicating layouts easier
       object.center_y += divider.center_y;
@@ -79,9 +79,12 @@ void draw(){
   }
   if (inLevel){
     currentFrame++;
-    int[] collisions = updatePhysics(player, entangled_player, environment, currentFrame);
-    colliding = collisions[0];
-    entangledColliding = collisions[1];
+    if (environment.type == "color_match"){
+      updatePhysics(player, entangled_player, environment, currentFrame);
+    }
+    else {
+      updateColor(player, entangled_player, environment, currentFrame);
+    }
     if (currentFrame == frameRate){
       currentFrame = 0;
     }
@@ -90,13 +93,12 @@ void draw(){
 
 void keyPressed(){
   if (inLevel){
-    if (true){
-      physicsController(player, entangled_player, environment, MOVE_SPEED);
+    if (environment.movementEnabled && environment.type != "color_match"){
+        //colorController(player, entangled_player);
+        physicsController(player, entangled_player, environment, MOVE_SPEED);
     }
-    if (!environment.movementEnabled && environment.type == "color_match"){
-      if (key == ' '){
-        // Rotate the player's color
-      }
+    if (environment.type == "color_match"){
+      colorController(player, entangled_player);
     }
   }
   return;

@@ -8,8 +8,8 @@
         "X": 2,
         "Y": 2
     },
-    "movement_enabled": true,
-    "type": "platform",
+    "movement_enabled": false,
+    "type": "color_match",
     "description": "Test level for developing new mechanics.",
     "objects_main": [
         {
@@ -67,6 +67,22 @@
                 "Y": 3.5
             },
             "scale": 0.5
+        },
+        {
+            "is_dynamic": true,
+            "use_sprite": false,
+            "name": "",
+            "translate": {
+                "X": 6.0,
+                "Y": 5.0
+            },
+            "motionIsVertical": false,
+            "speed": -3.0,
+            "width": 0.0,
+            "height": 10.0,
+            "thickness": 3.0,
+            "color": 0,
+            "scale": 1.0
         },
         {
             "is_dynamic": false,

@@ -48,7 +48,7 @@ public class Actor{
     change_y = 0;
     w = sprite.width * scale;
     h = sprite.height * scale;
-    baseColor = 0;
+    baseColor = 0xffffffff;
     thickness = 0;
     name = fileName;
   }
@@ -89,7 +89,6 @@ public class Actor{
   }
 
   public void display(){
-    println(baseColor);
     if (sprite != null){
         tint(baseColor);
         image(sprite, center_x, center_y, w, h);
@@ -129,8 +128,6 @@ public class Actor{
 // Simple extension of the actor class that is capable of being repositioned each frame and detecting collision
 public class DynamicActor extends Actor{
   float mass;
-  float change_x;
-  float change_y;
 
   public DynamicActor(String name, float scale, float x, float y, float w, float h, int rgb, float objectMass, float strokeThickness){
     super(name, scale, x, y, w, h, rgb, strokeThickness);
@@ -180,15 +177,15 @@ public class DynamicActor extends Actor{
     int colliding = ensureInBounds(this, verticalBounds); //Value of 0 is no collision between actors
     ArrayList<Actor> collisions = this.checkCollisionList(mapObjects);
     if(collisions.size() > 0){
+      colliding = 1;
       for (Actor object: collisions){
         if (object.name.equals("goal")){
             colliding = 2; // Value of 2 means the player is colliding with a goal actor
         }
-        else {
+        else{
           this.resolveCollision(object);
         }
       }
-      colliding = 1;
     }
     else {
       this.center_x += this.change_x;
